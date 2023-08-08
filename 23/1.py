@@ -20,22 +20,39 @@ marjetica = "M"
 dirt = "/"
 regrat = "R"
 
-n = int(input())
-l = int(input())
+max_eat = int(input())
+travnik_len = int(input())
 seq = input()
 
-
 eaten = 0
-
 streak = 0
 
-for ele in seq:
-    if not ele == trava:
-        ...
-    
-    if ele == dirt:
+for i in range(len(seq)):
+    current = seq[i]
+
+    if not current == trava:
+        streak = 0
+
+    if current == dirt:
         continue
+    
+    if current == marjetica:
+        try:
+            before = seq[i - 1]
+        except IndexError:
+            before = ""
 
-    eaten += 1
+        if not before == regrat:  # regrat ni bil nazaj
+            eaten = eaten + 1
 
-print(eaten)
+    if current == trava:
+        if streak > 3:
+            streak = 0
+            continue
+        else:
+            streak = streak + 1
+            eaten = eaten + 1
+
+    if eaten == max_eat:
+        break
+print(i + 1)
