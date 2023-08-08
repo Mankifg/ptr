@@ -16,9 +16,10 @@ Primer
 Naloga
 Izračunaj, koliko sidrnih mest mora prečkati reševalna ladja, ki hiti na pomoč ladji Umag 2."""
 
-#https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
+# https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 
-class Node():
+
+class Node:
     """A node class for A* Pathfinding"""
 
     def __init__(self, parent=None, position=None):
@@ -36,134 +37,125 @@ class Node():
 def astar(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
-    # Create start and end node
     start_node = Node(None, start)
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, end)
     end_node.g = end_node.h = end_node.f = 0
 
-    # Initialize both open and closed list
     open_list = []
     closed_list = []
 
-    # Add the start node
     open_list.append(start_node)
 
-    # Loop until you find the end
     while len(open_list) > 0:
-
-        # Get the current node
         current_node = open_list[0]
         current_index = 0
         for index, item in enumerate(open_list):
             if item.f < current_node.f:
                 current_node = item
                 current_index = index
-
-        # Pop current off open list, add to closed list
         open_list.pop(current_index)
         closed_list.append(current_node)
-
-        # Found the goal
         if current_node == end_node:
             path = []
             current = current_node
             while current is not None:
                 path.append(current.position)
                 current = current.parent
-            return path[::-1] # Return reversed path
-
-        # Generate children
+            return path[::-1]
         children = []
-        #for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
-        for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0)]: # Adjacent squares
-        
-
-            # Get node position
-            node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
-
-            # Make sure within range
-            if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
+        # for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
+        for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0)]:  # Adjacent squares
+            node_position = (
+                current_node.position[0] + new_position[0],
+                current_node.position[1] + new_position[1],
+            )
+            if (
+                node_position[0] > (len(maze) - 1)
+                or node_position[0] < 0
+                or node_position[1] > (len(maze[len(maze) - 1]) - 1)
+                or node_position[1] < 0
+            ):
                 continue
 
-            # Make sure walkable terrain
-            if maze[node_position[0]][node_position[1]] != 0:
+            if maze[node_position[1]][node_position[0]] != 0:
                 continue
 
-            # Create new node
             new_node = Node(current_node, node_position)
 
-            # Append
             children.append(new_node)
 
-        # Loop through children
         for child in children:
-
-            # Child is on the closed list
             for closed_child in closed_list:
                 if child == closed_child:
                     continue
-
-            # Create the f, g, and h values
             child.g = current_node.g + 1
-            child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
+            child.h = ((child.position[0] - end_node.position[0]) ** 2) + (
+                (child.position[1] - end_node.position[1]) ** 2
+            )
             child.f = child.g + child.h
-
-            # Child is already in the open list
             for open_node in open_list:
                 if child == open_node and child.g > open_node.g:
                     continue
-
-            # Add the child to the open list
             open_list.append(child)
 
-def change(b,x,y):
-    b[x][y] = 1
+# my code
+ 
+def change(x, y):
+    b[y][x] = 1
 
 
 import numpy as np
 
+m, n = list(map(int, input().split(" ")))
 
-m,n = list(map(int,input().split(' ')))
+b = np.zeros((m, n))
 
-b = np.zeros((m,n))
-
-se = list(map(int,input().split(' ')))
+se = list(map(int, input().split(" ")))
 start = (se[0], se[1])
-end = (se[2],se[3])
+end = (se[2], se[3])
 
 n = int(input())
 
-
-
 for _ in range(n):
-    print(n)
-    data = list(map(int,input().split(' ')))
-    
-    '''p1 = [data[0],data[1]]
-    p2 = [data[2],data[3]]'''
-    
-    data[0] = data[0] - 1
-    data[1] = data[1] - 1
-    data[2] = data[2] - 1
-    data[3] = data[3] - 1
-    
-    if data[0] == data[2]:
-        for c in range(data[1],data[3]+1):
-            change(b,data[0],c)
-            
-    print(b)
+    data = list(map(int, input().split(" ")))
+
+    x1 = data[0]
+    y1 = data[1]
+    x2 = data[2]
+    y2 = data[3]
+
+    if x1 == x2:
+        key_x = x1
+
+        for y in range(y1, y2 + 1):
+            b[y][key_x] = 1
+
+    elif y1 == y2:
+        key_y = y1
+        for x in range(x1, x2 + 1):
+            b[key_y][x] = 1
 
 path = astar(b, start, end)
-print(path)
 
-'''
+for i in range(len(path)):
+    b[path[i][1]][path[i][0]] = 9
+
+b[start[1]][start[0]] = 3
+b[end[1]][end[0]] = 3
+
+print(len(path) - 1)
+
+# print(path)
+# print(b)
+
+"""
 10 10
-3 3 7 7
+2 2 6 6
 5
-2 4 2 8
-2 4 7 4
-4 6 7 6
-4 8 7 8 
-9 4 9 9
-'''
+1 3 1 7
+1 3 6 3
+5 3 5 6
+8 5 8 7
+3 8 8 8
+"""
