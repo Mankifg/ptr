@@ -22,16 +22,11 @@ def find_possiblity(num):
     diff = 0
     
     a = int(num / kuharji[0])+1
-    b = int(num / kuharji[1])+1
     
     for i in range(0,a):
-        for j in range(0,b):
-            if i * kuharji[0] + j * kuharji[1] == num:
-                diff = diff+1
-                #print(f"{i} * {kuharji[0]} + {j} * {kuharji[1]} = {num}, {diff}")
-    
+        if i * kuharji[0] % kuharji[1] == 0:
+            diff += 1
     return diff
-    
-    
-find = find_possiblity(1000)
+
+find = find_possiblity(10000)
 print(find)
