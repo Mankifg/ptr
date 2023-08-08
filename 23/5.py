@@ -5,6 +5,7 @@ Kot vhod v program boš dobil 2D sliko morja v katerem se nahaja Blåhaj (predst
 
 Najprej kot vhodne podatke dobimo dve števili, ki sta višina in širina morja. Nato sledi še slika, ki je sestavljena iz zgoraj omenjenih znakov.
 """
+
 def update(t):
     t[-1] = t[-1] + 1
     for i in range(len(t)-1,0,-1):
@@ -37,14 +38,12 @@ b = []
 for i in range(visina):
     b.append(list(input()))
     
-#print(b)
+
 
 for i in range(len(b)):
     if "B" in b[i]:
         visina_b = i
         sirina_b = b[i].index("B")
-        
-print(visina_b, sirina_b)
 
 for i in range(len(b)):
     c = b[i]
@@ -59,7 +58,7 @@ m_food = 0
 
 for _ in range(3**len(toggle)):
     toggle = update(toggle)
-    #print(toggle)
+    #? print(toggle)
     food  = with_toggle_go(toggle)
     m_food = max(m_food,food)
     
