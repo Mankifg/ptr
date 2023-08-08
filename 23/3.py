@@ -9,7 +9,6 @@ vse razdalje so v kilometrih
 vse hitrosti so v kilometrih na uro
 znaki bodo podani glede na oddaljenost od začetka naše poti (najbližji najprej)
 '''
-
 import math
 
 pot, z_omj, znaki = list(map(int,input().split(' ')))
